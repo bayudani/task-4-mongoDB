@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const bookController = require('../controller/book.controller');
-
+const auth = require('../middleware/auth');
 /**
  * @swagger
  * /books:
@@ -22,7 +22,7 @@ const bookController = require('../controller/book.controller');
  *       400:
  *         description: Bad request
  */
-router.post('/', bookController.createBook);
+router.post('/', auth, bookController.createBook);
 
 /**
  * @swagger
@@ -92,7 +92,7 @@ router.get('/:id', bookController.getBookById);
  *       404:
  *         description: Book not found
  */
-router.put('/:id', bookController.updateBook);
+router.put('/:id', auth, bookController.updateBook);
 
 /**
  * @swagger
@@ -113,6 +113,6 @@ router.put('/:id', bookController.updateBook);
  *       404:
  *         description: Book not found
  */
-router.delete('/:id', bookController.deleteBook);
+router.delete('/:id', auth, bookController.deleteBook);
 
 module.exports = router;

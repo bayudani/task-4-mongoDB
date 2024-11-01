@@ -2,6 +2,9 @@ const Book = require('../models/book.models');
 
 exports.createBook = async (req, res) => {
     try {
+        const existingBook = await Book.findOne({ title: req.body.title });
+        if (existingBook) throw Error('Judul buku sudah ada');
+        
         const book = new Book(req.body);
         await book.save();
         res.status(201).json(book);
@@ -9,6 +12,7 @@ exports.createBook = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 };
+
 
 exports.getBooks = async (req, res) => {
     const books = await Book.find();

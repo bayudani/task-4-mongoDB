@@ -11,9 +11,11 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
 const connectDB = require('./config/db.config');
 const swaggerConfig = require('./config/swagger.config');
+const errorHandler = require('./middleware/errorHandler')
+
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/user.routes');
 var bookRouter = require('./routes/book.routes');
 
 
@@ -21,12 +23,13 @@ connectDB();
 var app = express();
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://127.0.0.1:5500', 'https://week6-express.vercel.app'],
+  origin: ['http://localhost:3000','http://localhost:3000/api-docs','http://localhost:3001'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type'],
   credentials: true
 }
 
+app.use(errorHandler);
 app.use(cors(corsOptions));
 // middleware body parser
 app.use(bodyParser.urlencoded({ extended: false }));
