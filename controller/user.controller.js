@@ -24,11 +24,15 @@ exports.login = async (req, res)=>{
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) throw new Error('Username atau password salah');
 
-
         const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '1h'});
-        res.cookie('token',token,{httpOnly: true});
-        res.status(200).json({message:'login berhasil',token});
+        
+        res.cookie('token', token, {httpOnly: true});
+        res.status(200).json({
+            message: 'login berhasil',
+            token,
+            userId: user._id
+        });
     } catch (error) {
-        res.status(400).json({error:error.message});
+        res.status(400).json({error: error.message});
     }
 };

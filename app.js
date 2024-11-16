@@ -23,14 +23,15 @@ connectDB();
 var app = express();
 
 const corsOptions = {
-  origin: ['http://localhost:3000','http://localhost:3000/api-docs','http://localhost:3001'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type'],
-  credentials: true
-}
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-API-KEY'],
+  credentials: true,
+  exposedHeaders: ['set-cookie']
+};
 
-app.use(errorHandler);
 app.use(cors(corsOptions));
+app.use(errorHandler);
 // middleware body parser
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -40,12 +41,6 @@ const swaggerSpec = swaggerJSDoc(swaggerConfig);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-KEY');
-  next();
-});
 
 
 app.use(logger('dev'));
